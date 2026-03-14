@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhabbet For Necla</title>
+    <style>
+        /* Sitenin genel görünümü ve ortalama ayarları */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #fce4ec; /* Necla ismine yakışır tatlı, açık pembe bir arka plan */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h1 {
+            color: #d81b60;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Kuşun başlangıç ayarları */
+        #kus {
+            width: 250px; /* Fotoğrafın boyutunu buradan ayarlayabilirsin */
+            cursor: pointer; /* Tıklanabilir olduğunu belli etmek için imleci el yapıyoruz */
+            transition: transform 0.1s;
+        }
+
+        /* Kuşun üzerine gelince hafif büyüme efekti (opsiyonel ama şık durur) */
+        #kus:hover {
+            transform: scale(1.05);
+        }
+
+        /* Takla (360 derece dönme) animasyonu */
+        @keyframes taklaAt {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* JavaScript ile bu sınıfı ekleyip çıkaracağız */
+        .takla-animasyonu {
+            animation: taklaAt 0.6s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Muhabbet For Necla</h1>
+    
+    <img id="kus" src="kus.png" alt="Muhabbet Kuşu">
+
+    <script>
+        // HTML'deki kuş elementini ve ses dosyalarını JavaScript'e tanıtıyoruz
+        const kus = document.getElementById('kus');
+        const sesler = ['ses1.mp3', 'ses2.mp3'];
+
+        // Kuşa tıklanınca olacaklar
+        kus.addEventListener('click', () => {
+            
+            // 1. TAKLA ANİMASYONU
+            // Animasyonu üst üste tıklamalarda baştan başlatmak için sınıfı silip tekrar ekliyoruz
+            kus.classList.remove('takla-animasyonu');
+            void kus.offsetWidth; // Tarayıcıyı tetiklemek için ufak bir hile (Reflow)
+            kus.classList.add('takla-animasyonu');
+
+            // 2. RASTGELE SES ÇALMA
+            // Array içinden rastgele bir indeks (0 veya 1) seçiyoruz
+            const rastgeleIndeks = Math.floor(Math.random() * sesler.length);
+            const secilenSes = sesler[rastgeleIndeks];
+            
+            // Sesi oluşturup çalıyoruz
+            const audio = new Audio(secilenSes);
+            audio.play();
+        });
+    </script>
+
+</body>
+</html>
