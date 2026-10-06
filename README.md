@@ -2,11 +2,18 @@
 
 Telefonda oynanan, sonsuz, yükseltmeli bir uçuş-atış oyunu. Muhabbet kuşunu parmağınla sürükle, düşmanları tohumla vur, güçlen ve ne kadar uzağa gidebileceğini gör.
 
-## 📲 Kurulum
+## 📲 Telefonda oyna
 
-1. Bu repodaki **[`MuhabbetKusu.apk`](MuhabbetKusu.apk)** dosyasını telefona indir.
-2. Dosyayı aç. Telefon izin isterse **"Bilinmeyen kaynaklardan yüklemeye izin ver"** seçeneğini aç.
-3. **Yükle**'ye bas ve oyna. (Android 8.0 ve üzeri)
+### Seçenek 1: APK (Android uygulaması)
+1. Telefondan **[Son Sürüm sayfasını](https://github.com/R0YC0LD/MuhabbetForNecla/releases/latest)** aç.
+2. **`MuhabbetKusu.apk`** dosyasına dokunup indir ve aç.
+3. Telefon sorarsa **"Bilinmeyen kaynaklardan yüklemeye izin ver"** seçeneğini aç, **Yükle**'ye bas. (Android 8.0+)
+
+APK her push'ta GitHub Actions tarafından otomatik derlenir ve bu sayfaya konur. Repodaki [`MuhabbetKusu.apk`](MuhabbetKusu.apk) dosyası da aynı oyundur.
+
+### Seçenek 2: Tarayıcıdan (kurulum gerekmez, iPhone'da da çalışır)
+1. **https://r0yc0ld.github.io/MuhabbetForNecla/** adresini telefonda aç.
+2. İstersen tarayıcı menüsünden **"Ana ekrana ekle"** de: oyun tam ekran bir uygulama gibi açılır ve internetsiz de çalışır.
 
 ## 🎮 Oynanış
 
@@ -36,4 +43,5 @@ Tüm grafikler ve sesler kodla üretilir, internet gerekmez. İlerleme telefonda
 - Oyun: `app/src/main/assets/` (HTML5 Canvas + JavaScript). Tarayıcıda `index.html` açılarak da test edilebilir.
 - Android kabuğu: `app/src/main/java/com/necla/muhabbet/MainActivity.java` (tam ekran WebView, titreşim ve geri tuşu köprüsü).
 - Derleme: `./gradlew assembleRelease` → `app/build/outputs/apk/release/app-release.apk`
-- Her push'ta GitHub Actions APK'yı derleyip "Artifacts" olarak ekler.
+- Her push'ta GitHub Actions APK'yı derler ve "son-surum" adlı GitHub Release'e koyar.
+- Web sürümü GitHub Pages ile ana daldan yayınlanır (kök `index.html` oyuna yönlendirir).

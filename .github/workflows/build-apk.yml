@@ -5,19 +5,47 @@ on:
     branches: ['**']
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
+
+      # GitHub'ın Ubuntu makinelerinde Android SDK hazır kurulu gelir (ANDROID_HOME).
+      - name: Android SDK bileşenleri
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-35" "build-tools;35.0.0" > /dev/null
+
       - name: APK derle
-        run: ./gradlew assembleRelease --no-daemon
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
+          cp app/build/outputs/apk/release/app-release.apk MuhabbetKusu.apk
+
       - uses: actions/upload-artifact@v4
         with:
           name: MuhabbetKusu-apk
-          path: app/build/outputs/apk/release/app-release.apk
+          path: MuhabbetKusu.apk
+
+      # Telefondan kolayca indirilebilsin diye her derlemede "son-surum" sürümünü yenile
+      - name: GitHub Release olarak yayınla
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete son-surum --cleanup-tag --yes || true
+          gh release create son-surum MuhabbetKusu.apk \
+            --target "$GITHUB_SHA" \
+            --title "Muhabbet Kuşu – Son Sürüm" \
+            --notes "Telefonda bu sayfadan **MuhabbetKusu.apk** dosyasına dokunarak indir ve kur. (Android 8.0+)
+
+          Derleme: ${GITHUB_REF_NAME} @ ${GITHUB_SHA::7}" \
+            --latest

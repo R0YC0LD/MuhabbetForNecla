@@ -1824,7 +1824,26 @@
   // =====================================================================
   //  Oyun akışı: başlat / duraklat / bitir
   // =====================================================================
+  const IN_APP = !!window.AndroidBridge;
+
+  // Tarayıcıda oynarken (APK dışında) tam ekrana geç ve dikey ekrana kilitle
+  function goFullscreen() {
+    if (IN_APP) return;
+    const d = document.documentElement;
+    const isStandalone = window.matchMedia && window.matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches;
+    if (isStandalone || document.fullscreenElement || !d.requestFullscreen) return;
+    try {
+      const p = d.requestFullscreen({ navigationUI: 'hide' });
+      if (p && p.then) {
+        p.then(() => {
+          if (screen.orientation && screen.orientation.lock) screen.orientation.lock('portrait').catch(() => {});
+        }).catch(() => {});
+      }
+    } catch (e) { /* desteklenmiyor */ }
+  }
+
   function startGame() {
+    goFullscreen();
     hideAllScreens();
     newRun();
     state = 'play';
@@ -2440,10 +2459,14 @@
   setTimeout(checkDaily, 400);
   requestAnimationFrame(frame);
 
+  if (!IN_APP && 'serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
+
   // Test/hata ayıklama için dışarı aç
   window.__game = {
     get state() { return state; }, get run() { return run; }, get player() { return player; },
-    get enemies() { return enemies; }, get ebullets() { return ebullets; }, P: P, S: () => S, startGame: startGame,
+    get enemies() { return enemies; }, get ebullets() { return ebullets; }, P: P, S: () => S, startGame: startGame, drawBird: drawBird, SKINS: SKINS,
     // Denge testi: oyunu çizim yapmadan hızlıca ilerletir
     sim(seconds, bot) {
       const dt = 1 / 60;
