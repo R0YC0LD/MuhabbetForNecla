@@ -1,0 +1,38 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.necla.muhabbet'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.necla.muhabbet'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+    }
+
+    signingConfigs {
+        // Uygulamayı yan yükleme (sideload) için sabit anahtar; güncellemeler aynı imzayla kurulabilsin diye repoda tutulur.
+        release {
+            storeFile file('release.keystore')
+            storePassword 'muhabbet123'
+            keyAlias 'muhabbet'
+            keyPassword 'muhabbet123'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}

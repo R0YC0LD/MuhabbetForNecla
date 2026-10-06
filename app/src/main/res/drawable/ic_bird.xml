@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- kuyruk -->
+    <path android:fillColor="#2E5AA8" android:pathData="M48,70 L54,92 L60,70 Z" />
+    <!-- kanatlar -->
+    <path android:fillColor="#3A8A2A" android:pathData="M44,52 C30,46 22,54 24,66 C32,64 40,62 46,64 Z" />
+    <path android:fillColor="#3A8A2A" android:pathData="M64,52 C78,46 86,54 84,66 C76,64 68,62 62,64 Z" />
+    <!-- gövde -->
+    <path android:fillColor="#5CC93B" android:pathData="M54,40 C64,40 68,52 68,60 C68,70 62,76 54,76 C46,76 40,70 40,60 C40,52 44,40 54,40 Z" />
+    <!-- kafa -->
+    <path android:fillColor="#F5E04A" android:pathData="M54,26 C61,26 65,31 65,37 C65,43 60,47 54,47 C48,47 43,43 43,37 C43,31 47,26 54,26 Z" />
+    <!-- gözler -->
+    <path android:fillColor="#111111" android:pathData="M47,35 m-2.4,0 a2.4,2.4 0 1,0 4.8,0 a2.4,2.4 0 1,0 -4.8,0" />
+    <path android:fillColor="#111111" android:pathData="M61,35 m-2.4,0 a2.4,2.4 0 1,0 4.8,0 a2.4,2.4 0 1,0 -4.8,0" />
+    <!-- gaga -->
+    <path android:fillColor="#F29A2E" android:pathData="M51,39 L57,39 L54,45 Z" />
+    <!-- yanak benekleri -->
+    <path android:fillColor="#4A63D8" android:pathData="M46,42 m-1.6,0 a1.6,1.6 0 1,0 3.2,0 a1.6,1.6 0 1,0 -3.2,0" />
+    <path android:fillColor="#4A63D8" android:pathData="M62,42 m-1.6,0 a1.6,1.6 0 1,0 3.2,0 a1.6,1.6 0 1,0 -3.2,0" />
+</vector>

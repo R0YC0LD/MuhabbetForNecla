@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Muhabbet Kuşu: Sonsuz Gökyüzü</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<!-- Oyun içi HUD -->
+<div id="hud" class="hidden">
+  <div class="hud-top">
+    <div class="hud-left">
+      <div id="hearts"></div>
+      <div id="hud-level">Sv 1</div>
+    </div>
+    <div class="hud-center">
+      <div id="hud-wave">Dalga 1</div>
+      <div id="hud-score">0</div>
+    </div>
+    <div class="hud-right">
+      <div id="hud-coins"><span class="coin-ico"></span><span id="hud-coin-val">0</span></div>
+      <button id="btn-pause" class="icon-btn" aria-label="Duraklat">❚❚</button>
+    </div>
+  </div>
+  <div id="xpbar"><div id="xpfill"></div></div>
+  <div id="bossbar" class="hidden"><div id="bossname">Fırtına Kralı</div><div class="bar"><div id="bossfill"></div></div></div>
+  <div id="banner" class="hidden"></div>
+  <div id="fps" class="hidden"></div>
+  <div id="drag-hint" class="hidden">Kuşu hareket ettirmek için<br>ekranda parmağını sürükle</div>
+</div>
+
+<!-- Ana menü -->
+<div id="scr-menu" class="screen hidden">
+  <div class="menu-top">
+    <div class="pill"><span class="coin-ico"></span><span id="menu-coins">0</span></div>
+    <div class="pill">🏆 <span id="menu-best">0</span></div>
+  </div>
+  <div class="title-wrap">
+    <h1>Muhabbet Kuşu</h1>
+    <h2>Sonsuz Gökyüzü</h2>
+  </div>
+  <div class="menu-spacer"></div>
+  <div class="menu-buttons">
+    <button id="btn-play" class="btn big primary">▶ OYNA</button>
+    <div class="row">
+      <button id="btn-shop" class="btn">⬆ Yükseltmeler</button>
+      <button id="btn-skins" class="btn">🎨 Kostümler</button>
+    </div>
+    <div class="row">
+      <button id="btn-ach" class="btn">🏅 Başarımlar</button>
+      <button id="btn-settings" class="btn">⚙ Ayarlar</button>
+    </div>
+    <button id="btn-howto" class="btn ghost">❔ Nasıl Oynanır</button>
+  </div>
+</div>
+
+<!-- Yükseltme mağazası -->
+<div id="scr-shop" class="screen panel-screen hidden">
+  <div class="panel">
+    <div class="panel-head">
+      <button class="icon-btn back" data-back>‹</button>
+      <h3>Yükseltmeler</h3>
+      <div class="pill"><span class="coin-ico"></span><span class="coins-val">0</span></div>
+    </div>
+    <div class="panel-body" id="shop-list"></div>
+  </div>
+</div>
+
+<!-- Kostümler -->
+<div id="scr-skins" class="screen panel-screen hidden">
+  <div class="panel">
+    <div class="panel-head">
+      <button class="icon-btn back" data-back>‹</button>
+      <h3>Kostümler</h3>
+      <div class="pill"><span class="coin-ico"></span><span class="coins-val">0</span></div>
+    </div>
+    <div class="panel-body grid" id="skin-list"></div>
+  </div>
+</div>
+
+<!-- Başarımlar -->
+<div id="scr-ach" class="screen panel-screen hidden">
+  <div class="panel">
+    <div class="panel-head">
+      <button class="icon-btn back" data-back>‹</button>
+      <h3>Başarımlar</h3>
+      <div class="pill" id="ach-count">0/0</div>
+    </div>
+    <div class="panel-body" id="stats-box"></div>
+    <div class="panel-body" id="ach-list"></div>
+  </div>
+</div>
+
+<!-- Ayarlar -->
+<div id="scr-settings" class="screen panel-screen hidden">
+  <div class="panel">
+    <div class="panel-head">
+      <button class="icon-btn back" data-back>‹</button>
+      <h3>Ayarlar</h3>
+      <div></div>
+    </div>
+    <div class="panel-body" id="settings-list"></div>
+  </div>
+</div>
+
+<!-- Nasıl oynanır -->
+<div id="scr-howto" class="screen panel-screen hidden">
+  <div class="panel">
+    <div class="panel-head">
+      <button class="icon-btn back" data-back>‹</button>
+      <h3>Nasıl Oynanır</h3>
+      <div></div>
+    </div>
+    <div class="panel-body howto">
+      <p>👆 <b>Ekranın herhangi bir yerinde parmağını sürükle</b>, kuş parmağının hareketini takip eder. Kuş otomatik olarak tohum fırlatır.</p>
+      <p>👾 Düşmanları vur, düşen <b>mavi kristalleri</b> topla ve seviye atla. Her seviyede 3 güçten birini seç.</p>
+      <p>🪙 <b>Altınlar</b> kalıcıdır. Ana menüdeki <b>Yükseltmeler</b> bölümünde kuşunu kalıcı olarak güçlendir, <b>Kostümler</b>den yeni renkler aç.</p>
+      <p>👑 Her 5 dalgada bir <b>boss</b> gelir. Oyun sonsuzdur; düşmanlar her dalgada biraz daha güçlenir. Ne kadar uzağa gidebilirsin?</p>
+      <p>❤️ Kalpler canındır. Düşman mermisi ya da çarpışma bir kalp götürür. Kalkanlar bir vuruşu engeller.</p>
+      <p>🎁 Bazen düşen <b>güçlendirmeler</b>: ❤ Can, 🛡 Kalkan, ⚡ Çılgın Atış, 💣 Bomba, 🧲 Süper Mıknatıs.</p>
+      <p>⚙ Kontrol hassasiyetini, kontrol modunu, sesleri ve grafik kalitesini <b>Ayarlar</b>dan değiştirebilirsin.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Seviye atlama kartları -->
+<div id="scr-levelup" class="screen overlay hidden">
+  <div class="lu-title">SEVİYE ATLADIN!</div>
+  <div class="lu-sub">Bir güç seç</div>
+  <div id="cards"></div>
+  <button id="btn-reroll" class="btn small">🎲 Yenile (<span id="reroll-n">0</span>)</button>
+</div>
+
+<!-- Duraklatma -->
+<div id="scr-pause" class="screen overlay hidden">
+  <div class="dlg">
+    <h3>Duraklatıldı</h3>
+    <div id="pause-build"></div>
+    <button id="btn-resume" class="btn big primary">▶ Devam Et</button>
+    <button id="btn-pause-settings" class="btn">⚙ Ayarlar</button>
+    <button id="btn-quit" class="btn danger">✕ Oyunu Bitir</button>
+  </div>
+</div>
+
+<!-- Oyun sonu -->
+<div id="scr-over" class="screen overlay hidden">
+  <div class="dlg">
+    <h3 id="over-title">Oyun Bitti</h3>
+    <div id="over-new" class="hidden">YENİ REKOR!</div>
+    <div class="over-stats">
+      <div><span>Dalga</span><b id="over-wave">0</b></div>
+      <div><span>Skor</span><b id="over-score">0</b></div>
+      <div><span>Öldürülen</span><b id="over-kills">0</b></div>
+      <div><span>Seviye</span><b id="over-level">0</b></div>
+      <div><span>Süre</span><b id="over-time">0</b></div>
+      <div><span>En İyi Dalga</span><b id="over-best">0</b></div>
+      <div class="gold"><span>Kazanılan Altın</span><b id="over-coins">0</b></div>
+    </div>
+    <button id="btn-again" class="btn big primary">↻ Tekrar Oyna</button>
+    <div class="row">
+      <button id="btn-over-shop" class="btn">⬆ Yükselt</button>
+      <button id="btn-over-menu" class="btn">⌂ Menü</button>
+    </div>
+  </div>
+</div>
+
+<!-- Onay / bilgi penceresi -->
+<div id="scr-modal" class="screen overlay hidden">
+  <div class="dlg">
+    <h3 id="modal-title"></h3>
+    <div id="modal-text"></div>
+    <div class="row" id="modal-btns"></div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<script src="game.js"></script>
+</body>
+</html>
